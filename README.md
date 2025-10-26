@@ -3,6 +3,14 @@
 **TCRDD** is a Bash tool that extends Git with a new command: `git-bet`.  
 It automates the *Test → Commit → Revert* workflow, helping you code with higher discipline and safety.
 
+This tool is inspired from : 
+- practices used in the [Dojo Developpement Paris Meetup](https://www.meetup.com/dojo-developpement-paris/)
+- The [git-gamble](https://gitlab.com/pinage404/git-gamble) TCRDD Rust tool
+
+I do personnaly prefer using bash scripts as developpement tooling, in standard bash with as low footprint as possible.
+
+Thanks to the [Dojo Developpement Paris Meetup](https://www.meetup.com/dojo-developpement-paris/) and to [Pinage404](https://gitlab.com/pinage404) for the inspiration.
+
 ---
 
 ## 🚀 Features
