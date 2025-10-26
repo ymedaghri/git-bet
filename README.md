@@ -17,13 +17,13 @@ Thanks to the [Dojo Developpement Paris Meetup](https://www.meetup.com/dojo-deve
 
 ### 🎯 Core commands
 
-| Command | Description |
-|----------|-------------|
-| `git-bet pass <command>` | Run tests — if they pass, automatically commit changes. If they fail, revert code. |
-| `git-bet fail <command>` | Expect failure — if tests unexpectedly pass, revert code. Otherwise, do nothing. |
-| `git-bet timer <minutes> <command>` | Run `git-bet pass` every _N_ minutes automatically in the background. |
-| `git-bet timer 0` | Stop the background timer and log tail. |
-| `git-bet collapse` | Interactively squash a chosen number of recent commits into one. |
+| Command | Description | Example |
+|----------|-------------|--------|
+| `git-bet pass <command>` | Run tests — if they pass, automatically commit changes. If they fail, revert code. | `git-bet pass npm test` <br/> `gbp ./gradlew test`
+| `git-bet fail <command>` | Expect failure — if tests unexpectedly pass, revert code. Otherwise, do nothing. |`git-bet fail npm test` <br/> `gbf ./gradlew test`|
+| `git-bet timer <minutes> <command>` | Run `git-bet pass` every _N_ minutes automatically in the background. |`gbt 3 npm test`|
+| `git-bet timer 0` | Stop the background timer and log tail. |`gbt 0`|
+| `git-bet collapse` | Interactively squash a chosen number of recent commits into one. |`gbc`|
 
 ---
 
