@@ -20,10 +20,10 @@ function execute(){
     esac
 }
 
-function git-bet() {
+function git-bet() { # comment bash sait qu'il doit executer cette fonction ?
     # === HELP ===
-    function func_help() {        
-        echo "Help :"
+    function func_help() { # je ne savais pas que bash supportait les fonctions nested
+        echo "Help :" # il y a une sous commande collapse non documentée ; ligne 98
         echo "------"
         echo "git-bet pass <command...> : Bet that the command passes"
         echo "git-bet fail <command...> : Bet that the command fails"
@@ -48,7 +48,7 @@ function git-bet() {
                 git commit -m "TCR auto-commit"
             else
                 echo "⚠️ Expected failure, but tests passed — reverting code..."
-                git reset --hard
+                git reset --hard # ça n'effacera pas les nouveaux fichiers (untracked by git)
             fi
         else
             if [ "$mode" = "pass" ]; then
@@ -60,7 +60,7 @@ function git-bet() {
         fi
 
         # Update last run timestamp
-        date +%s >"$LAST_RUN_FILE"
+        date +%s >"$LAST_RUN_FILE" # dépendance implicite
     }
 
     # === MAIN FUNCTION ===
@@ -80,7 +80,7 @@ function git-bet() {
 
         mkdir -p "$STATE_DIR"
 
-        if ! command -v git >/dev/null 2>&1; then
+        if ! command -v git >/dev/null 2>&1; then # git est utilisé en 69 et 75 ; ce bloc devrait etre en 68
             echo "❌ Error: 'git' command not found."
             return 1
         fi            
@@ -96,7 +96,7 @@ function git-bet() {
 
         # === GIT COLLAPSE ===
         if [ "$mode" = "collapse" ]; then
-            git --no-pager log --oneline -n 20
+            git --no-pager log --oneline -n 20 # pourquoi 20 ? pourquoi il est hardcodé ?
             echo
             # Ask how many commits to collapse
             echo "How many recent commits do you want to collapse? "
@@ -109,14 +109,14 @@ function git-bet() {
             # Ask for the new combined commit message
             echo "New commit message: "
             read new_message
-            if [ -z "$new_message" ]; then
+            if [ -z "$new_message" ]; then # que ce passe-t-il si je met des espaces ou une chaine qui commence par # ?
                 echo "❌ Commit message cannot be empty."
                 return 1
             fi
 
             # Confirm action
             echo "⚙️ Collapsing last $count commits into one..."
-            sleep 1
+            sleep 1 # pourquoi attendre ? pourquoi 1 seconde ?
 
             # Do a soft reset and re-commit
             git reset --soft HEAD~"$count" || {
@@ -141,8 +141,8 @@ function git-bet() {
             # Stop timer if minutes=0
             if [ "$minutes" -eq 0 ]; then
                 if [ -f "$TIMER_PID_FILE" ]; then
-                    kill "$(cat "$TIMER_PID_FILE")" 2>/dev/null
-                    rm -f "$TIMER_PID_FILE"
+                    kill "$(cat "$TIMER_PID_FILE")" 2>/dev/null # dépendance implicite
+                    rm -f "$TIMER_PID_FILE" # dépendance implicite
 
                     if [ -f "$TIMER_TAIL_FILE" ]; then
                         kill "$(cat "$TIMER_TAIL_FILE")" 2>/dev/null
@@ -167,14 +167,14 @@ function git-bet() {
             echo "Logs will be written to $TIMER_LOG"
 
             # Clear previous log
-            : >"$TIMER_LOG"
+            : >"$TIMER_LOG" # ça veut dire quoi ":" ?
 
             # ===== Background timer =====
             (
                 while true; do
                     now=$(date +%s)
                     if [ -f "$LAST_RUN_FILE" ]; then
-                        last_run=$(cat "$LAST_RUN_FILE")
+                        last_run=$(cat "$LAST_RUN_FILE") # dépendance implicite
                     else
                         last_run=$now  # Wait full interval on first run
                     fi
@@ -187,7 +187,7 @@ function git-bet() {
                             echo "⏰ No changes detected; skipping auto-run at $(date)" >> "$TIMER_LOG"
                         else
                             echo "⏰ Auto-running tests at $(date)..." >> "$TIMER_LOG"
-                            run_test pass "${test_command[@]}" >>"$TIMER_LOG" 2>&1 < /dev/null
+                            run_test pass "${test_command[@]}" >>"$TIMER_LOG" 2>&1 < /dev/null # pourquoi /dev/null est nécessaire ?
                         fi                        
                     fi
 
@@ -198,15 +198,15 @@ function git-bet() {
             echo "Background timer PID: $(cat "$TIMER_PID_FILE")"
 
             # ===== Tail log in background =====
-            tail -f "$TIMER_LOG" &
+            tail -f "$TIMER_LOG" & # dépendance implicite
             TAIL_PID=$!
-            echo $TAIL_PID > "$STATE_DIR/tail.pid"
+            echo $TAIL_PID > "$STATE_DIR/tail.pid" # il y a la varialbe TIMER_TAIL_FILE
             return 0
         fi
 
         # === PASS/FAIL HANDLER ===
         if [ "$mode" != "pass" ] && [ "$mode" != "fail" ]; then
-            echo "❌ Error: First parameter must be 'pass', 'fail', or 'timer'!"
+            echo "❌ Error: First parameter must be 'pass', 'fail', or 'timer'!" # et collapse ; ligne 98
             func_help
             return 1
         fi
