@@ -207,13 +207,13 @@ function git-bet() {
             # ===== Tail log in background =====
             tail -f "$TIMER_LOG" &
             TAIL_PID=$!
-            echo $TAIL_PID > "$STATE_DIR/$TIMER_TAIL_FILE"
+            echo $TAIL_PID > "$TIMER_TAIL_FILE"
             return 0
         fi
 
         # === PASS/FAIL HANDLER ===
         if [ "$mode" != "pass" ] && [ "$mode" != "fail" ]; then
-            echo "❌ Error: First parameter must be 'pass', 'fail', or 'timer' or 'collapse' !"
+            echo "❌ Error: First parameter must be 'pass', 'fail', 'timer' or 'collapse' !"
             func_help
             return 1
         fi
