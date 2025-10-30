@@ -8,6 +8,8 @@ alias gbp='git-bet pass'
 alias gbf='git-bet fail'
 alias gbt='git-bet timer'
 
+GITBET_COLLAPSE_DEFAULT_LOG_COUNT=50
+
 function execute(){
 
     case "$3" in
@@ -29,6 +31,7 @@ function git-bet() {
         echo "git-bet fail <command...> : Bet that the command fails"
         echo "git-bet timer <minutes> <command...> : Run the command automatically every N minutes in background"
         echo "git-bet timer 0 : Stop the background timer"
+        echo "git-bet collapse <n?>: Displays the last n (or 50) lines of git log and asks the user how many recent commits to squash and automatically performs an interactive rebase."
         echo
     }
 
@@ -49,11 +52,13 @@ function git-bet() {
             else
                 echo "⚠️ Expected failure, but tests passed — reverting code..."
                 git reset --hard
+                git clean -fd
             fi
         else
             if [ "$mode" = "pass" ]; then
                 echo "💥 Tests failed unexpectedly — reverting code..."
                 git reset --hard
+                git clean -fd
             else
                 echo "✅ Tests failed as expected — no action taken."
             fi
@@ -65,6 +70,11 @@ function git-bet() {
 
     # === MAIN FUNCTION ===
     function func_runnable() {
+
+        if ! command -v git >/dev/null 2>&1; then
+            echo "❌ Error: 'git' command not found."
+            return 1
+        fi 
 
         if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
             echo "❌ Error: Not inside a Git repository."
@@ -80,11 +90,6 @@ function git-bet() {
 
         mkdir -p "$STATE_DIR"
 
-        if ! command -v git >/dev/null 2>&1; then
-            echo "❌ Error: 'git' command not found."
-            return 1
-        fi            
-
         if [ $# -lt 1 ]; then
             echo "❌ Error: missing parameter."
             func_help
@@ -96,7 +101,10 @@ function git-bet() {
 
         # === GIT COLLAPSE ===
         if [ "$mode" = "collapse" ]; then
-            git --no-pager log --oneline -n 20
+
+            local show_count=${1:-$GITBET_COLLAPSE_DEFAULT_LOG_COUNT}
+
+            git --no-pager log --oneline -n "$show_count"
             echo
             # Ask how many commits to collapse
             echo "How many recent commits do you want to collapse? "
@@ -116,7 +124,6 @@ function git-bet() {
 
             # Confirm action
             echo "⚙️ Collapsing last $count commits into one..."
-            sleep 1
 
             # Do a soft reset and re-commit
             git reset --soft HEAD~"$count" || {
@@ -200,13 +207,13 @@ function git-bet() {
             # ===== Tail log in background =====
             tail -f "$TIMER_LOG" &
             TAIL_PID=$!
-            echo $TAIL_PID > "$STATE_DIR/tail.pid"
+            echo $TAIL_PID > "$STATE_DIR/$TIMER_TAIL_FILE"
             return 0
         fi
 
         # === PASS/FAIL HANDLER ===
         if [ "$mode" != "pass" ] && [ "$mode" != "fail" ]; then
-            echo "❌ Error: First parameter must be 'pass', 'fail', or 'timer'!"
+            echo "❌ Error: First parameter must be 'pass', 'fail', or 'timer' or 'collapse' !"
             func_help
             return 1
         fi
