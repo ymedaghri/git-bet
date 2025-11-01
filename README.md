@@ -44,7 +44,7 @@ stateDiagram-v2
 The idea is to enforce the use of red > green > refactor in this sequence.
 1. You have to create a failing test (RED)
 2. You have to make it pass (GREEN)
-3. You can refactor you code as you need (REFACTOR)
+3. You can refactor your code as you need (REFACTOR)
 4. ... then you iterate again in this same order
 
 Each time you perform an illegal action, you code is reverted and you start the loop again
