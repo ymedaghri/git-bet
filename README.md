@@ -32,6 +32,13 @@ stateDiagram-v2
     GREEN --> NOT_STARTED : illegal action / tests failed
     REFACTOR --> NOT_STARTED : illegal action / tests failed
 
+    %% Color the phases
+    style RED fill:#ff4d4d,stroke:#000,stroke-width:1px,color:#fff
+    style GREEN fill:#4CAF50,stroke:#000,stroke-width:1px,color:#fff
+    style REFACTOR fill:#2196F3,stroke:#000,stroke-width:1px,color:#fff
+    style NOT_STARTED fill:#cccccc,stroke:#000,stroke-width:1px
+
+
 ```
 
 The idea is to enforce the use of red > green > refactor in this sequence.
