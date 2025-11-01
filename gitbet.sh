@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# TCRDD - Test Commit Revert Driven Development
+# GitBet - Test Commit Revert Bets
 # Copyright (c) 2025 Youssef MEDAGHRI ALAOUI
 # Licensed under the MIT License. See LICENSE file in the project root for details.
 
@@ -7,6 +7,7 @@ alias gbc='git-bet collapse'
 alias gbp='git-bet pass'
 alias gbf='git-bet fail'
 alias gbt='git-bet timer'
+alias collapse='gbc'
 
 GITBET_COLLAPSE_DEFAULT_LOG_COUNT=50
 
