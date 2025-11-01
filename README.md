@@ -1,11 +1,16 @@
 # 🧠 TCRDD — Test, Commit, Revert Driven Development
 
-**TCRDD** is a Bash tool that extends Git with a new command: `git-bet`.  
+**TCRDD** is a Bash tool that extends Git with two new command line tools: `git-tdd` and `git-bet`.  
 It automates the *Test → Commit → Revert* workflow, helping you code with higher discipline and safety.
 
 There are **two modes** for this tool (Read the section below for detailled informations): 
-- git bet
-- git tdd
+- **git tdd**
+This mode is the recommended one, and is intended to follow the TDD philosophy.
+`Write a failing test` > `then type red` > `Make it pass` > `then type green` > `refactor as you want` > `then type refactor` > `... and iterate`
+- **git bet**
+This mode is the legacy one, but is kept as it can be useful in some coding dojos.
+In this mode you can bet a test should pass `git-bet pass ./npm run test` or fail `git-bet fail ./npm run test`
+You can also put in place a background timer that will perform `pass` each \<n\> minutes `git-bet timer 2 ./npm run test`
 
 
 This tool is inspired from : 
