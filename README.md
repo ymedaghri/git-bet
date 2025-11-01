@@ -97,7 +97,7 @@ Each time you perform an illegal action, you code is reverted and you start the 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/ymedaghri/git-bet.git   
+   git clone https://github.com/ymedaghri/tcrdd.git
    ```
 
 2. Copy the content of gittdd.sh into your ~/.zshrc or ~/.bash_profile or ~/.bashrc for the git-tdd tool
